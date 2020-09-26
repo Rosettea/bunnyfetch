@@ -17,7 +17,7 @@ pub fn username() -> String {
 
 #[cfg(target_family = "unix")]
 pub fn hostname() -> Result<String, bool> {
-	Ok(var("HOSTNAME").unwrap());
+	Ok(var("HOSTNAME").unwrap())
 }
 
 #[cfg(target_family = "windows")]
