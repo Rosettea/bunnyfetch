@@ -10,11 +10,25 @@ pub enum Colors {
 	Blue,
 	Magenta,
 	Cyan,
-	White
+	White,
+	BrightBlack,
+	BrightRed,
+	BrightGreen,
+	BrightYellow,
+	BrightBlue,
+	BrightMagenta,
+	BrightCyan,
+	Reset,
 }
 
 impl fmt::Display for Colors {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    	write!(f, "\x1b[3{}m", *self as u8)
-    }
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		let code = match *self as u8 {
+			0..=7 => format!("\x1b[3{}m", *self as u8),
+			8..=15 => format!("\x1b[9{}m", *self as u8),
+			16 => "\x1b[0m".to_string(),
+			_ => "".to_string() // We should never reach this
+		};
+		write!(f, "{}", code)
+	}
 }
