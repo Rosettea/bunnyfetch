@@ -27,7 +27,7 @@ impl fmt::Display for Colors {
 			0..=7 => format!("\x1b[3{}m", *self as u8),
 			8..=14 => format!("\x1b[9{}m", *self as u8),
 			15 => "\x1b[0m".to_string(),
-			_ => "".to_string() // We should never reach this
+			_ => panic!("forgot to add a new case for match"), // We should never reach this
 		};
 		write!(f, "{}", code)
 	}
