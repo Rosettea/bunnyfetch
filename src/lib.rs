@@ -41,6 +41,35 @@ pub fn title() -> Title {
 	}
 }
 
+#[cfg(target_family = "unix")]
+pub fn os() -> Result<String, bool> {
+	let output = Command::new("lsb_release")
+		.arg("-sd")
+		.output();
+
+	match output {
+		Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
+		Err(_) => return Err(true),
+	}
+}
+
+#[cfg(target_family = "windows")]
+pub fn os() -> Result<String, bool> {
+	let output = Command::new("wmic")
+		.args(&["os", "get", "Caption"])
+		.output();
+
+	match output {
+		Ok(output_) => {
+			let output = String::from_utf8(output_.stdout).unwrap();
+			let pat: Vec<&str> = output.split_terminator("\r\r\n").collect();
+			let os = pat[1];
+			return Ok(os.trim().to_string().split_off(10))
+		},
+		Err(_) => return Err(true),
+	}
+}
+
 impl fmt::Display for Title {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "{}@{}", self.username, self.hostname)
