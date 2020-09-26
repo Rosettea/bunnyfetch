@@ -50,10 +50,13 @@ jobs:
           args: --release
       - name: Pack archive
         uses: montudor/action-zip@v0.1.0
-        - if: contains(matrix.os, 'windows')
-        with: zip -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
-        - if: contains(matrix.os, 'windows') == false
-        with: zip -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
+        
+      - if: contains(matrix.os, 'windows')
+        with:
+          args: -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
+      - if: contains(matrix.os, 'windows') == false
+        with:
+          args: -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
         with:
