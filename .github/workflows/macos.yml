@@ -8,22 +8,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: Linux
-            os: ubuntu-latest
-          - build: macOS
+          - build: x64
             os: macOS-latest
-          - build: win32-msvc
-            os: windows-latest
-            target: i686-pc-windows-msvc
-          - build: win32-gnu
-            os: windows-latest
-            target: i686-pc-windows-gnu
-          - build: win64-msvc
-            os: windows-latest
-            target: x86_64-pc-windows-msvc
-          - build: win64-gnu
-            os: windows-latest
-            target: x86_64-pc-windows-gnu
+            target: i686-apple-darwin
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
