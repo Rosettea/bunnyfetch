@@ -1,0 +1,63 @@
+name: Release
+on:
+  repository_dispatch:
+    types: [tag-created]
+
+jobs:
+  release:
+    name: ${{ matrix.build }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - build: macos64
+            os: macOS-latest
+            target: x86_64-apple-darwin
+          - build: linux32-gnu
+            os: ubuntu-latest
+            target: i686-unknown-linux-gnu
+          - build: linux64-gnu
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - build: win32-msvc
+            os: windows-latest
+            target: i686-pc-windows-msvc
+          - build: win32-gnu
+            os: windows-latest
+            target: i686-pc-windows-gnu
+          - build: win64-msvc
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+          - build: win64-gnu
+            os: windows-latest
+            target: x86_64-pc-windows-gnu
+          
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          profile: minimal
+          override: true
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - name: Pack archive
+        uses: montudor/action-zip@v0.1.0
+        if: contains(matrix.os, 'windows')
+        with: zip -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
+        if: contains(matrix.os, 'windows') == false
+        with: zip -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
+      - name: Upload zip to release
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: bunnyfetch.zip
+          asset_name: bunnyfetch-${{ matrix.build }}.zip
+          tag: ${{ github.event.client_payload.new_version }}

@@ -10,7 +10,7 @@ jobs:
         include:
           - build: x64
             os: macOS-latest
-            target: i686-apple-darwin
+            target: x86_64-apple-darwin
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
