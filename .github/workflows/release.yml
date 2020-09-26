@@ -1,7 +1,7 @@
 name: Release
 on:
-  repository_dispatch:
-    types: [tag-created]
+  release:
+    types: [created]
 
 jobs:
   release:
@@ -60,4 +60,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: bunnyfetch.zip
           asset_name: bunnyfetch-${{ matrix.build }}.zip
-          tag: ${{ github.event.client_payload.new_version }}
+          tag: ${{ github.ref }}
