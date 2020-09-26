@@ -49,12 +49,12 @@ jobs:
           command: build
           args: --release
       - name: Pack archive
-        uses: montudor/action-zip@v0.1.0
-        
       - if: contains(matrix.os, 'windows')
+        uses: montudor/action-zip@v0.1.0
         with:
           args: -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
       - if: contains(matrix.os, 'windows') == false
+        uses: montudor/action-zip@v0.1.0
         with:
           args: -qq -r bunnyfetch.zip target/release/bunnyfetch.exe README.md LICENSE
       - name: Upload zip to release
