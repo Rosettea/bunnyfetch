@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Build - ${{ matrix.build }}
+    name: ${{ matrix.build }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
