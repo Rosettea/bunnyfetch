@@ -1,4 +1,4 @@
-name: Cross compile
+name: MacOS Build
 on: [push, pull_request]
 
 jobs:
