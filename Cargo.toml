@@ -1,0 +1,7 @@
+[package]
+name = "bunnyfetch"
+version = "0.1.0"
+authors = ["TorchedSammy <no@no.no>"]
+edition = "2018"
+
+[dependencies]
