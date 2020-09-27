@@ -52,7 +52,7 @@ jobs:
       - name: Pack archive
         uses: montudor/action-zip@v0.1.0
         with:
-          args: -qq -r bunnyfetch.zip target/release/bunnyfetch target/release/bunnyfetch.exe README.md LICENSE
+          args: zip bunnyfetch.zip target/release/bunnyfetch target/release/bunnyfetch.exe README.md LICENSE
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
         with:
