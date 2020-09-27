@@ -29,7 +29,7 @@ jobs:
           - build: windows-x32-gnu
             os: windows-latest
             target: i686-pc-windows-gnu
-          - build: windowa-x64-gnu
+          - build: windows-x64-gnu
             os: windows-latest
             target: x86_64-pc-windows-gnu
           
