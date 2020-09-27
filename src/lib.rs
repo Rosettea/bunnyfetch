@@ -101,7 +101,7 @@ pub fn kernel() -> Result<String, ()> {
 
 #[cfg(target_family = "unix")]
 pub fn de() -> Result<String, ()> {
-	unimplemented!()
+	"Unknown".to_string()
 }
 
 #[cfg(target_family = "windows")]

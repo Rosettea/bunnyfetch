@@ -1,6 +1,6 @@
 [package]
 name = "bunnyfetch"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["TorchedSammy"]
 edition = "2018"
 description = "🐰 Tiny system info fetch utility and library."
