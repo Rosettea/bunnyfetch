@@ -101,7 +101,7 @@ pub fn kernel() -> Result<String, ()> {
 
 #[cfg(target_family = "unix")]
 pub fn de() -> Result<String, ()> {
-	"Unknown".to_string()
+	Ok("Unknown".to_string())
 }
 
 #[cfg(target_family = "windows")]
