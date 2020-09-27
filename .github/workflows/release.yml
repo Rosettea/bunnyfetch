@@ -47,7 +47,6 @@ jobs:
       - name: Build
         uses: actions-rs/cargo@v1
         with:
-          use-cross: true
           command: build
           args: --release --target=${{ matrix.target }}
       - name: Pack archive
