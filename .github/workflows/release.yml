@@ -49,7 +49,8 @@ jobs:
           command: build
           args: --release --target=${{ matrix.target }}
       - name: Pack archive
-        run: mv target/release/* . && tar cfvz bunnyfetch.tar.gz target/release/bunnyfetch target/release/bunnyfetch.exe README.md LICENSE
+        continue-on-error: true
+        run: mv target/release/* . && tar cfvz bunnyfetch.tar.gz bunnyfetch bunnyfetch.exe README.md LICENSE
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
         with:
