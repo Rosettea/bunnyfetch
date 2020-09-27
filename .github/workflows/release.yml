@@ -42,6 +42,8 @@ jobs:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
+      - name: Install other build tools
+        run: sudo apt install build-essential
       - name: Build
         uses: actions-rs/cargo@v1
         with:
