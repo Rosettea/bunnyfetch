@@ -1,34 +1,35 @@
 name: Release
+
 on:
   release:
     types: [created]
 
 jobs:
-  release:
+  build:
     name: ${{ matrix.build }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
-          - build: macos64
-            os: macOS-latest
-            target: x86_64-apple-darwin
-          - build: linux32-gnu
+          - build: linux-x32-gnu
             os: ubuntu-latest
             target: i686-unknown-linux-gnu
-          - build: linux64-gnu
+          - build: linux-x64-gnu
             os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-          - build: win32-msvc
+          - build: macos-x64
+            os: macOS-latest
+            target: x86_64-apple-darwin
+          - build: windows-x32-msvc
             os: windows-latest
             target: i686-pc-windows-msvc
-          - build: win32-gnu
-            os: windows-latest
-            target: i686-pc-windows-gnu
-          - build: win64-msvc
+          - build: windows-x64-msvc
             os: windows-latest
             target: x86_64-pc-windows-msvc
-          - build: win64-gnu
+          - build: windows-x32-gnu
+            os: windows-latest
+            target: i686-pc-windows-gnu
+          - build: windowa-x64-gnu
             os: windows-latest
             target: x86_64-pc-windows-gnu
           
@@ -47,10 +48,10 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target=${{ matrix.target }}
+          args: --release
       - name: Pack archive
         continue-on-error: true
-        run: mv target/release/* . && tar cfvz bunnyfetch.tar.gz bunnyfetch bunnyfetch.exe README.md LICENSE
+        run: tar cfvz bunnyfetch.tar.gz target/release/bunnyfetch target/release/bunnyfetch.exe README.md LICENSE
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
         with:
