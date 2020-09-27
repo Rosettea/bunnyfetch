@@ -16,18 +16,18 @@ pub fn username() -> String {
 }
 
 #[cfg(target_family = "unix")]
-pub fn hostname() -> Result<String, bool> {
+pub fn hostname() -> Result<String, ()> {
 	Ok(var("HOSTNAME").unwrap())
 }
 
 #[cfg(target_family = "windows")]
-pub fn hostname() -> Result<String, bool> {
+pub fn hostname() -> Result<String, ()> {
 	let output = Command::new("hostname")
 		.output();
 
 	match output {
 		Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
-		Err(_) => return Err(true),
+		Err(_) => return Err(()),
 	}
 }
 
@@ -42,19 +42,19 @@ pub fn title() -> Title {
 }
 
 #[cfg(target_family = "unix")]
-pub fn os() -> Result<String, bool> {
+pub fn os() -> Result<String, ()> {
 	let output = Command::new("lsb_release")
 		.arg("-sd")
 		.output();
 
 	match output {
 		Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
-		Err(_) => return Err(true),
+		Err(_) => return Err(()),
 	}
 }
 
 #[cfg(target_family = "windows")]
-pub fn os() -> Result<String, bool> {
+pub fn os() -> Result<String, ()> {
 	let output = Command::new("wmic")
 		.args(&["os", "get", "Caption"])
 		.output();
@@ -66,24 +66,24 @@ pub fn os() -> Result<String, bool> {
 			let os = pat[1];
 			return Ok(os.trim().to_string().split_off(10))
 		},
-		Err(_) => return Err(true),
+		Err(_) => return Err(()),
 	}
 }
 
 #[cfg(target_family = "unix")]
-pub fn kernel() -> Result<String, bool> {
+pub fn kernel() -> Result<String, ()> {
 	let output = Command::new("uname")
 		.arg("-r")
 		.output();
 
 	match output {
 		Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
-		Err(_) => return Err(true),
+		Err(_) => return Err(()),
 	}
 }
 
 #[cfg(target_family = "windows")]
-pub fn kernel() -> Result<String, bool> {
+pub fn kernel() -> Result<String, ()> {
 	let output = Command::new("wmic")
 		.args(&["os", "get", "Version"])
 		.output();
@@ -95,17 +95,17 @@ pub fn kernel() -> Result<String, bool> {
 			let os = pat[1];
 			return Ok(os.trim().to_string())
 		},
-		Err(_) => return Err(true),
+		Err(_) => return Err(()),
 	}
 }
 
 #[cfg(target_family = "unix")]
-pub fn de() -> Result<String, bool> {
+pub fn de() -> Result<String, ()> {
 	unimplemented!()
 }
 
 #[cfg(target_family = "windows")]
-pub fn de() -> Result<String, bool> {
+pub fn de() -> Result<String, ()> {
 	let os = os().unwrap();
 	let pat: Vec<&str> = os.split_terminator(" ").collect();
 	if pat[1].trim() == "7" {
