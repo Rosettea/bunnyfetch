@@ -17,7 +17,13 @@ pub fn username() -> String {
 
 #[cfg(target_family = "unix")]
 pub fn hostname() -> Result<String, ()> {
-	Ok(var("HOSTNAME").unwrap())
+	let output = Command::new("hostname")
+		.output();
+
+	match output {
+		Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
+		Err(_) => return Err(()),
+	}
 }
 
 #[cfg(target_family = "windows")]
