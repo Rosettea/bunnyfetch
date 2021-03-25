@@ -12,7 +12,7 @@ pub struct Title {
 }
 
 pub fn username() -> String {
-    var("USERNAME").unwrap()
+    var("USERNAME").unwrap_or("na".to_string())
 }
 
 #[cfg(target_family = "unix")]
