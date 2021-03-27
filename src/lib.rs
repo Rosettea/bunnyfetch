@@ -137,19 +137,3 @@ impl fmt::Display for Title {
         write!(f, "{}@{}", self.username, self.hostname)
     }
 }
-
-#[macro_export]
-macro_rules! printr {
-	() => (print!("\x1b[0m"));
-	($($arg:tt)*) => ({
-		print!("{}\x1b[0m", format_args!($($arg)*));
-	})
-}
-
-#[macro_export]
-macro_rules! printlnr {
-	() => (println!("\x1b[0m"));
-	($($arg:tt)*) => ({
-		println!("{}\x1b[0m", format_args!($($arg)*));
-	})
-}
