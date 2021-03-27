@@ -11,10 +11,14 @@ fn main() {
         kernel().trim_end()
     );
     println!("   ( . .)  {} DE {}{}", Colors::Blue, Colors::Reset, de());
-    println!("   c({}\"{})({0}\"{1})", Colors::Red, Colors::Reset);
-    print!("\n	   ");
+    print!("   c({}\"{})({0}\"{1})", Colors::Red, Colors::Reset);
+    print!("  ");
     for pat in 0..=7 {
-        print!("\x1b[4{}m  ", pat)
+        print!("\x1B[10{}m  ", pat)
+    }
+    print!("{}\n            ", Colors::Reset);
+    for pat in 0..=7 {
+        print!("\x1B[4{}m  ", pat);
     }
     println!()
 }
