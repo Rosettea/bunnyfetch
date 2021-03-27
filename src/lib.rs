@@ -1,5 +1,4 @@
 use std::env::var;
-use std::fmt;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
