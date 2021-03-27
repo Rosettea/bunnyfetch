@@ -93,7 +93,7 @@ pub fn kernel() -> Result<String, ()> {
 
 #[cfg(target_family = "unix")]
 pub fn de() -> String {
-    var("DESKTOP_SESSION").unwrap_or(String::from("na"))
+    var("XDG_SESSION_DESKTOP").unwrap_or(String::from("na"))
 }
 
 #[cfg(target_family = "unix")]
@@ -108,11 +108,17 @@ pub fn os() -> String {
 
     let split: String = line
         .split('\n')
-        .filter(|&x| x.contains("NAME"))
+        .filter(|&x| x.contains("ID"))
         .take(1)
         .collect();
 
-    split.split('=').nth(1).unwrap().replace("\"", "")
+    let string = split.split('=').nth(1).unwrap().replace("\"", "");
+
+    let mut c = string.chars();
+    match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().chain(c).collect(),
+    }
 }
 
 #[cfg(target_family = "windows")]
