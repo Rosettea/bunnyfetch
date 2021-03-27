@@ -46,17 +46,7 @@ pub fn title() -> Title {
     Title { username, hostname }
 }
 
-#[cfg(target_family = "unix")]
-pub fn os() -> Result<String, ()> {
-    let output = Command::new("lsb_release").arg("-sd").output();
-
-    match output {
-        Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => return Err(()),
-    }
-}
-
-#[ignore = "inactive-code"]
+#[ignore("inactive-code")]
 #[cfg(target_family = "windows")]
 pub fn os() -> Result<String, ()> {
     let output = Command::new("wmic")
@@ -103,13 +93,26 @@ pub fn kernel() -> Result<String, ()> {
 
 #[cfg(target_family = "unix")]
 pub fn de() -> String {
+    var("DESKTOP_SESSION").unwrap_or(String::from("na"))
+}
+
+#[cfg(target_family = "unix")]
+pub fn os() -> String {
     let f = File::open("/etc/os-release").unwrap();
     let mut reader = BufReader::with_capacity(50, f);
 
-    let mut line = String::with_capacity(50);
-    reader.read_line(&mut line);
+    let mut line = String::with_capacity(300);
+    if let Err(e) = reader.read_to_string(&mut line) {
+        panic!("failed to read /etc/os-release: {}", e)
+    }
 
-    line.trim_end().to_string()
+    let split: String = line
+        .split('\n')
+        .filter(|&x| x.contains("NAME"))
+        .take(1)
+        .collect();
+
+    split.split('=').nth(1).unwrap().replace("\"", "")
 }
 
 #[cfg(target_family = "windows")]

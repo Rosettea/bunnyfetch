@@ -3,12 +3,7 @@ use bunnyfetch::*;
 fn main() {
     // TODO: make this cleaner
     printr!("	    {}{}", Colors::Red, title());
-    printlnr!(
-        "	   {} OS {}{}",
-        Colors::Green,
-        Colors::Reset,
-        os().unwrap_or("na".to_string())
-    );
+    printlnr!("	   {} OS {}{}", Colors::Green, Colors::Reset, os());
     printlnr!(
         "   (\\ /)   {} Kernel {}{}",
         Colors::Yellow,
