@@ -26,16 +26,20 @@ impl fmt::Display for Title {
 }
 
 fn username() -> String {
+    // UNWRAP: Handled with or clause
     var("USER").unwrap_or("na".to_string())
 }
 
 // Use /etc/hostname to read hostname. $HOST does not appear to be set when called by rust
 #[cfg(target_family = "unix")]
 fn hostname<'a>() -> String {
+    // UNWRAP: /etc/hostname will always exist and readable on unix machines
     let f = File::open("/etc/hostname").unwrap();
     let mut reader = BufReader::with_capacity(20, f);
 
     let mut line = String::with_capacity(20);
+    // UNWRAP: /etc/hostname will always be UTF-8 encoded
+    // https://doc.rust-lang.org/std/io/trait.BufRead.html#errors-2
     reader.read_line(&mut line).unwrap();
     line
 }
@@ -52,6 +56,7 @@ fn hostname() -> Result<String, ()> {
 
 #[cfg(target_family = "unix")]
 pub fn os() -> String {
+    // UNWRAP: /etc/os-release will always exist and readable on unix machines
     let f = File::open("/etc/os-release").unwrap();
     let mut reader = BufReader::with_capacity(50, f);
 
@@ -66,8 +71,10 @@ pub fn os() -> String {
         .take(1)
         .collect();
 
+    // UNWRAP: /etc/os-release will always have KEY=VALUE pairs
     let string = split.split('=').nth(1).unwrap().replace("\"", "");
 
+    // To uppercase the first letter
     let mut c = string.chars();
     match c.next() {
         None => String::new(),
@@ -122,6 +129,7 @@ pub fn kernel() -> Result<String, ()> {
 
 #[cfg(target_family = "unix")]
 pub fn de() -> String {
+    // UNWRAP: handled safely with or clause
     var("XDG_SESSION_DESKTOP").unwrap_or(String::from("na"))
 }
 
