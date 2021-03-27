@@ -7,7 +7,7 @@ use std::process::Command;
 
 pub fn username() -> String {
     // UNWRAP: Handled with or clause
-    var("USER").unwrap_or("na".to_string())
+    var("USER").unwrap_or(String::from("Unknown"))
 }
 
 // Use /etc/hostname to read hostname. $HOST does not appear to be set when called by rust
@@ -114,7 +114,7 @@ pub fn kernel() -> Result<String, ()> {
 #[cfg(target_family = "unix")]
 pub fn de() -> String {
     // UNWRAP: handled safely with or clause
-    var("XDG_SESSION_DESKTOP").unwrap_or(String::from("na"))
+    var("XDG_SESSION_DESKTOP").unwrap_or(String::from("Unknown"))
 }
 
 #[cfg(target_family = "windows")]
