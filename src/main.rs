@@ -12,7 +12,7 @@ fn main() {
     );
     println!("   ( . .)  {} DE {}{}", Colors::Blue, Colors::Reset, de());
     print!("   c({}\"{})({0}\"{1})", Colors::Red, Colors::Reset);
-    print!("  ");
+    print!("{}\n            ", Colors::Reset);
     for pat in 0..=7 {
         print!("\x1B[10{}m  ", pat)
     }
