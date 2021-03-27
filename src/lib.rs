@@ -5,22 +5,33 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::process::Command;
 
-pub mod colors;
-pub use crate::colors::Colors;
-
-#[derive(Debug)]
 pub struct Title {
     username: String,
     hostname: String,
 }
 
-pub fn username() -> String {
+impl Title {
+    pub fn new() -> Self {
+        let username = username();
+        let hostname = hostname();
+
+        Title { username, hostname }
+    }
+}
+
+impl fmt::Display for Title {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}@{}", self.username, self.hostname)
+    }
+}
+
+fn username() -> String {
     var("USER").unwrap_or("na".to_string())
 }
 
 // Use /etc/hostname to read hostname. $HOST does not appear to be set when called by rust
 #[cfg(target_family = "unix")]
-pub fn hostname<'a>() -> String {
+fn hostname<'a>() -> String {
     let f = File::open("/etc/hostname").unwrap();
     let mut reader = BufReader::with_capacity(20, f);
 
@@ -30,7 +41,7 @@ pub fn hostname<'a>() -> String {
 }
 
 #[cfg(target_family = "windows")]
-pub fn hostname() -> Result<String, ()> {
+fn hostname() -> Result<String, ()> {
     let output = Command::new("hostname").output();
 
     match output {
@@ -39,11 +50,29 @@ pub fn hostname() -> Result<String, ()> {
     }
 }
 
-pub fn title() -> Title {
-    let username = username();
-    let hostname = hostname();
+#[cfg(target_family = "unix")]
+pub fn os() -> String {
+    let f = File::open("/etc/os-release").unwrap();
+    let mut reader = BufReader::with_capacity(50, f);
 
-    Title { username, hostname }
+    let mut line = String::with_capacity(300);
+    if let Err(e) = reader.read_to_string(&mut line) {
+        panic!("failed to read /etc/os-release: {}", e)
+    }
+
+    let split: String = line
+        .split('\n')
+        .filter(|&x| x.contains("ID"))
+        .take(1)
+        .collect();
+
+    let string = split.split('=').nth(1).unwrap().replace("\"", "");
+
+    let mut c = string.chars();
+    match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().chain(c).collect(),
+    }
 }
 
 #[ignore("inactive-code")]
@@ -96,31 +125,6 @@ pub fn de() -> String {
     var("XDG_SESSION_DESKTOP").unwrap_or(String::from("na"))
 }
 
-#[cfg(target_family = "unix")]
-pub fn os() -> String {
-    let f = File::open("/etc/os-release").unwrap();
-    let mut reader = BufReader::with_capacity(50, f);
-
-    let mut line = String::with_capacity(300);
-    if let Err(e) = reader.read_to_string(&mut line) {
-        panic!("failed to read /etc/os-release: {}", e)
-    }
-
-    let split: String = line
-        .split('\n')
-        .filter(|&x| x.contains("ID"))
-        .take(1)
-        .collect();
-
-    let string = split.split('=').nth(1).unwrap().replace("\"", "");
-
-    let mut c = string.chars();
-    match c.next() {
-        None => String::new(),
-        Some(f) => f.to_uppercase().chain(c).collect(),
-    }
-}
-
 #[cfg(target_family = "windows")]
 pub fn de() -> Result<String, ()> {
     let os = os().unwrap();
@@ -129,11 +133,5 @@ pub fn de() -> Result<String, ()> {
         Ok("Aero".to_string())
     } else {
         Ok("Metro".to_string())
-    }
-}
-
-impl fmt::Display for Title {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}@{}", self.username, self.hostname)
     }
 }

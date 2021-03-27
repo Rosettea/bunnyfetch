@@ -1,8 +1,12 @@
-use bunnyfetch::*;
+pub mod colors;
+mod lib;
+
+use colors::Colors;
+use lib::*;
 
 fn main() {
     // TODO: make this cleaner
-    print!("	    {}{}", Colors::Red, title());
+    print!("	    {}{}", Colors::Red, Title::new());
     println!("	   {} OS {}{}", Colors::Green, Colors::Reset, os());
     println!(
         "   (\\ /)   {} Kernel {}{}",
