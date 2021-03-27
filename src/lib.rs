@@ -102,12 +102,17 @@ pub fn os() -> Result<String, ()> {
 
 #[cfg(target_family = "unix")]
 pub fn kernel() -> String {
-    let output = Command::new("uname").arg("-r").output();
+    // UNWRAP: /proc/version will always exist and readable on unix machines
+    let f = File::open("/proc/version").unwrap();
+    let mut reader = BufReader::with_capacity(20, f);
 
-    match output {
-        Ok(output) => String::from_utf8(output.stdout).unwrap(),
-        Err(_) => String::from("na"),
-    }
+    let mut line = String::with_capacity(175);
+    // UNWRAP: /proc/version will always be UTF-8 encoded
+    // https://doc.rust-lang.org/std/io/trait.BufRead.html#errors-2
+    reader.read_line(&mut line).unwrap();
+    // UNWRAP: /proc/version has the same format with "Linux version <kern-version>" as the 3rd
+    // word
+    line.split(" ").nth(2).unwrap().to_string()
 }
 
 #[cfg(target_family = "windows")]
