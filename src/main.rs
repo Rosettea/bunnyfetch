@@ -13,14 +13,9 @@ fn main() {
         "   (\\ /)   {} Kernel {}{}",
         Colors::Yellow,
         Colors::Reset,
-        kernel().unwrap()
+        kernel().trim_end()
     );
-    printlnr!(
-        "   ( . .)  {} DE {}{}",
-        Colors::Blue,
-        Colors::Reset,
-        de().unwrap()
-    );
+    printlnr!("   ( . .)  {} DE {}{}", Colors::Blue, Colors::Reset, de());
     printlnr!("   c({}\"{})({0}\"{1})", Colors::Red, Colors::Reset);
     print!("\n	   ");
     for pat in 0..=7 {

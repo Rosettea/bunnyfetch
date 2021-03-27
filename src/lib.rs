@@ -1,5 +1,8 @@
 use std::env::var;
 use std::fmt;
+use std::fs::File;
+use std::io::prelude::*;
+use std::io::BufReader;
 use std::process::Command;
 
 pub mod colors;
@@ -12,17 +15,18 @@ pub struct Title {
 }
 
 pub fn username() -> String {
-    var("USERNAME").unwrap_or("na".to_string())
+    var("USER").unwrap_or("na".to_string())
 }
 
+// Use /etc/hostname to read hostname. $HOST does not appear to be set when called by rust
 #[cfg(target_family = "unix")]
-pub fn hostname() -> Result<String, ()> {
-    let output = Command::new("hostname").output();
+pub fn hostname<'a>() -> String {
+    let f = File::open("/etc/hostname").unwrap();
+    let mut reader = BufReader::with_capacity(20, f);
 
-    match output {
-        Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => return Err(()),
-    }
+    let mut line = String::with_capacity(20);
+    reader.read_line(&mut line).unwrap();
+    line
 }
 
 #[cfg(target_family = "windows")]
@@ -37,7 +41,7 @@ pub fn hostname() -> Result<String, ()> {
 
 pub fn title() -> Title {
     let username = username();
-    let hostname = hostname().unwrap_or("Unknown".to_string());
+    let hostname = hostname();
 
     Title { username, hostname }
 }
@@ -52,6 +56,7 @@ pub fn os() -> Result<String, ()> {
     }
 }
 
+#[ignore = "inactive-code"]
 #[cfg(target_family = "windows")]
 pub fn os() -> Result<String, ()> {
     let output = Command::new("wmic")
@@ -70,12 +75,12 @@ pub fn os() -> Result<String, ()> {
 }
 
 #[cfg(target_family = "unix")]
-pub fn kernel() -> Result<String, ()> {
+pub fn kernel() -> String {
     let output = Command::new("uname").arg("-r").output();
 
     match output {
-        Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => return Err(()),
+        Ok(output) => String::from_utf8(output.stdout).unwrap(),
+        Err(_) => String::from("na"),
     }
 }
 
@@ -97,8 +102,14 @@ pub fn kernel() -> Result<String, ()> {
 }
 
 #[cfg(target_family = "unix")]
-pub fn de() -> Result<String, ()> {
-    Ok("Unknown".to_string())
+pub fn de() -> String {
+    let f = File::open("/etc/os-release").unwrap();
+    let mut reader = BufReader::with_capacity(50, f);
+
+    let mut line = String::with_capacity(50);
+    reader.read_line(&mut line);
+
+    line.trim_end().to_string()
 }
 
 #[cfg(target_family = "windows")]
