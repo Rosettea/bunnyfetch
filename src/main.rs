@@ -6,7 +6,7 @@ use lib::*;
 
 fn main() {
     // TODO: make this cleaner
-    print!("	    {}{}", Colors::Red, Title::new());
+    print!("	    {}{}@{}", Colors::Red, username(), hostname());
     println!("	   {} OS {}{}", Colors::Green, Colors::Reset, os());
     println!(
         "   (\\ /)   {} Kernel {}{}",

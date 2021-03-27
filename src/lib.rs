@@ -5,34 +5,14 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::process::Command;
 
-pub struct Title {
-    username: String,
-    hostname: String,
-}
-
-impl Title {
-    pub fn new() -> Self {
-        let username = username();
-        let hostname = hostname();
-
-        Title { username, hostname }
-    }
-}
-
-impl fmt::Display for Title {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}@{}", self.username, self.hostname)
-    }
-}
-
-fn username() -> String {
+pub fn username() -> String {
     // UNWRAP: Handled with or clause
     var("USER").unwrap_or("na".to_string())
 }
 
 // Use /etc/hostname to read hostname. $HOST does not appear to be set when called by rust
 #[cfg(target_family = "unix")]
-fn hostname<'a>() -> String {
+pub fn hostname<'a>() -> String {
     // UNWRAP: /etc/hostname will always exist and readable on unix machines
     let f = File::open("/etc/hostname").unwrap();
     let mut reader = BufReader::with_capacity(20, f);
@@ -45,7 +25,7 @@ fn hostname<'a>() -> String {
 }
 
 #[cfg(target_family = "windows")]
-fn hostname() -> Result<String, ()> {
+pub fn hostname() -> Result<String, ()> {
     let output = Command::new("hostname").output();
 
     match output {
@@ -82,7 +62,6 @@ pub fn os() -> String {
     }
 }
 
-#[ignore("inactive-code")]
 #[cfg(target_family = "windows")]
 pub fn os() -> Result<String, ()> {
     let output = Command::new("wmic")
