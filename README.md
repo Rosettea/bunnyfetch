@@ -31,6 +31,7 @@
 
 # Install
 Binaries are provided at the releases page [here](https://github.com/Luvella/Bunnyfetch/releases).
+Alternatively, those on Arch Linux can compile using the [AUR package](https://aur.archlinux.org/packages/bunnyfetch-git/).
 
 ## Compiling
 This project is made in [Rust](https://rust-lang.org/) so you will require the Rust toolchain installed. Steps for its installation are provided at that link.  
