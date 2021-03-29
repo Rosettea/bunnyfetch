@@ -24,12 +24,12 @@ pub fn hostname<'a>() -> String {
 }
 
 #[cfg(target_family = "windows")]
-pub fn hostname() -> Result<String, ()> {
+pub fn hostname() -> String {
     let output = Command::new("hostname").output();
 
     match output {
-        Ok(output) => return Ok(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => return Err(()),
+        Ok(output) => return String::from_utf8(output.stdout).unwrap(),
+        Err(_) => panic!(),
     }
 }
 
@@ -62,7 +62,7 @@ pub fn os() -> String {
 }
 
 #[cfg(target_family = "windows")]
-pub fn os() -> Result<String, ()> {
+pub fn os() -> String {
     let output = Command::new("wmic")
         .args(&["os", "get", "Caption"])
         .output();
@@ -72,9 +72,9 @@ pub fn os() -> Result<String, ()> {
             let output = String::from_utf8(output_.stdout).unwrap();
             let pat: Vec<&str> = output.split_terminator("\r\r\n").collect();
             let os = pat[1];
-            return Ok(os.trim().to_string().split_off(10));
+            return os.trim().to_string().split_off(10);
         }
-        Err(_) => return Err(()),
+        Err(_) => panic!(),
     }
 }
 
@@ -94,7 +94,7 @@ pub fn kernel() -> String {
 }
 
 #[cfg(target_family = "windows")]
-pub fn kernel() -> Result<String, ()> {
+pub fn kernel() -> String {
     let output = Command::new("wmic")
         .args(&["os", "get", "Version"])
         .output();
@@ -104,9 +104,9 @@ pub fn kernel() -> Result<String, ()> {
             let output = String::from_utf8(output_.stdout).unwrap();
             let pat: Vec<&str> = output.split_terminator("\r\r\n").collect();
             let os = pat[1];
-            return Ok(os.trim().to_string());
+            return os.trim().to_string();
         }
-        Err(_) => return Err(()),
+        Err(_) => panic!(),
     }
 }
 
@@ -117,12 +117,12 @@ pub fn de() -> String {
 }
 
 #[cfg(target_family = "windows")]
-pub fn de() -> Result<String, ()> {
-    let os = os().unwrap();
+pub fn de() -> String {
+    let os = os();
     let pat: Vec<&str> = os.split_terminator(" ").collect();
     if pat[1].trim() == "7" {
-        Ok("Aero".to_string())
+        "Aero".to_string()
     } else {
-        Ok("Metro".to_string())
+        "Metro".to_string()
     }
 }
