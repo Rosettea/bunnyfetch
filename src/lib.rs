@@ -1,8 +1,11 @@
-use std::env::var;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::process::Command;
+use std::{
+    env::var,
+    path::{Path, PathBuf},
+};
 
 pub fn username() -> String {
     // UNWRAP: Handled with or clause
@@ -125,4 +128,12 @@ pub fn de() -> String {
     } else {
         "Metro".to_string()
     }
+}
+
+#[cfg(target_family = "unix")]
+pub fn shell() -> String {
+    // UNWRAP: handled safely with or clause
+    let path = PathBuf::from(var("SHELL").unwrap_or(String::from("Unknown")));
+    // UNWRAP: SHELL will never have .. as its file_name nor will it contain non-UTF8 chars
+    String::from(path.file_name().unwrap().to_str().unwrap())
 }
