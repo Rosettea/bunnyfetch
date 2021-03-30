@@ -137,3 +137,9 @@ pub fn shell() -> String {
     // UNWRAP: SHELL will never have .. as its file_name nor will it contain non-UTF8 chars
     String::from(path.file_name().unwrap().to_str().unwrap())
 }
+
+// TODO
+#[cfg(target_family = "windows")]
+pub fn shell() -> String {
+    String::from("cmd.exe")
+}
