@@ -20,7 +20,7 @@ fn main() {
         Colors::Reset,
         shell()
     );
-    print!(
+    println!(
         "   c({}\"{})({0}\"{1}) {} WM {}{}",
         Colors::Red,
         Colors::Reset,
