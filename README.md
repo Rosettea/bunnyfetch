@@ -35,7 +35,6 @@ Alternatively, those on Arch Linux can compile using the [AUR package](https://a
 Or, you can just run `go get -u github.com/Mewyuna/bunnyfetch`
 
 ## Manual Compile
-When installed run the following commands:  
 ```sh
 git clone https://github.com/Mewyuna/Bunnyfetch
 cd Bunnyfetch
