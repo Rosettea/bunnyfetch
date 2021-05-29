@@ -2,10 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 	"os"
-	"os/exec"
-	"os/user"
 
 	"github.com/spf13/cobra"
 	"github.com/joho/godotenv"
@@ -76,42 +73,3 @@ func wminf() string {
 	return "\033[35mWM " + r + WM()
 }
 
-func Title() string {
-	curuser, err := user.Current()
-	user := "Unknown"
-	if err == nil {
-		user = curuser.Username
-	}
-
-	hostname, err := os.Hostname()
-	host := "Unknown"
-	if err == nil {
-		host = hostname
-	}
-
-	return user + "@" + host
-}
-
-func OS() string {
-	return os.Getenv("NAME")
-}
-
-func Kernel() string {
-	// /proc/version should always exist on linux
-	procver, _ := os.ReadFile("/proc/version")
-
-	// /proc/version has the same format with "Linux version <kern-version>" as the 3rd
-	// word, `procver` is []byte so has to be converted 
-	return strings.Split(string(procver), " ")[2]
-}
-
-func Shell() string {
-	shellenv := strings.Split(os.Getenv("SHELL"), "/")
-	return shellenv[len(shellenv) - 1]
-}
-
-func WM() string {
-	out, _ := exec.Command("bash", "-c", `xprop -id $(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}') -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \"`).CombinedOutput()
-
-	return string(out)
-}
