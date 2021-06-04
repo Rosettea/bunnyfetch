@@ -1,4 +1,4 @@
-module github.com/Mewyuna/bunnyfetch
+module github.com/Rosettea/bunnyfetch
 
 go 1.16
 
