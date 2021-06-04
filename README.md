@@ -21,7 +21,8 @@
 		<br>-->
 		Bunnyfetch is a small and fast tool for getting info about your system.
 		The idea is from <a href="https://github.com/elenapan/dotfiles/blob/master/bin/bunnyfetch">this here</a> and I decided to make it crossplatform in Go.
-	</p>
+	</p><br>
+	<img src="https://modeus.is-inside.me/77BACbwf.png">
 </div>
 
 # Table of Contents
