@@ -27,7 +27,7 @@ var Bunny =
 
 func bunnyfetch() {
 	// /etc/os-release should always exist on Linux
-	_ = godotenv.Load("/etc/os-release")
+	godotenv.Load("/etc/os-release")
 	fmt.Printf(
 		Bunny,
 		titleinf(),
