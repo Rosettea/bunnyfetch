@@ -11,7 +11,7 @@ import (
 func OS() string {
 	out, err := exec.Command("sw_vers", "-productName").CombinedOutput()
 	if err != nil {
-		return "<Err getting OS Name>"
+		return "Unknown"
 	}
 	return strings.TrimSuffix(string(out), "\n")
 }
@@ -19,7 +19,7 @@ func OS() string {
 func Kernel() string {
 	out, err := exec.Command("uname", "-r").CombinedOutput()
 	if err != nil {
-		return "<Err getting Kernel Version>"
+		return "Unknown"
 	}
 	return strings.TrimSuffix(string(out), "\n")
 }
