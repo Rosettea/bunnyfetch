@@ -1,10 +1,9 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
-use std::process::Command;
 use std::{
     env::var,
-    path::{Path, PathBuf},
+    path::PathBuf,
 };
 
 pub fn username() -> String {
