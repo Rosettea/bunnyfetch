@@ -8,12 +8,12 @@ use std::{
 
 pub fn username() -> String {
     // UNWRAP: Handled with or clause
-    var("USER").unwrap_or(String::from("Unknown"))
+    var("USER").unwrap_or_else(|_| String::from("Unknown"))
 }
 
 // Use /etc/hostname to read hostname. $HOST does not appear to be set when called by rust
 #[cfg(target_family = "unix")]
-pub fn hostname<'a>() -> String {
+pub fn hostname() -> String {
     // UNWRAP: /etc/hostname will always exist and readable on unix machines
     let f = File::open("/etc/hostname").unwrap();
     let mut reader = BufReader::with_capacity(20, f);
@@ -92,7 +92,7 @@ pub fn kernel() -> String {
     reader.read_line(&mut line).unwrap();
     // UNWRAP: /proc/version has the same format with "Linux version <kern-version>" as the 3rd
     // word
-    line.split(" ").nth(2).unwrap().to_string()
+    line.split(' ').nth(2).unwrap().to_string()
 }
 
 #[cfg(target_family = "windows")]
@@ -115,7 +115,7 @@ pub fn kernel() -> String {
 #[cfg(target_family = "unix")]
 pub fn de() -> String {
     // UNWRAP: handled safely with or clause
-    var("XDG_SESSION_DESKTOP").unwrap_or(String::from("Unknown"))
+    var("XDG_SESSION_DESKTOP").unwrap_or_else(|_| String::from("Unknown"))
 }
 
 #[cfg(target_family = "windows")]
@@ -132,7 +132,8 @@ pub fn de() -> String {
 #[cfg(target_family = "unix")]
 pub fn shell() -> String {
     // UNWRAP: handled safely with or clause
-    let path = PathBuf::from(var("SHELL").unwrap_or(String::from("Unknown")));
+    // let path = PathBuf::from(var("SHELL").unwrap_or_else(|_| String::from("Unknown"));
+    let path = PathBuf::from(var("SHELL").unwrap_or_else(|_| String::from("Unknown")));
     // UNWRAP: SHELL will never have .. as its file_name nor will it contain non-UTF8 chars
     String::from(path.file_name().unwrap().to_str().unwrap())
 }
