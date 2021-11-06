@@ -37,7 +37,7 @@ Alternatively, those on Arch Linux can compile using the [AUR package](https://a
 This project is made in [Rust](https://rust-lang.org/) so you will require the Rust toolchain installed. Steps for its installation are provided at that link.  
 When installed run the following commands:  
 ```sh
-git clone https://github.com/Mewyuna/Bunnyfetch
+git clone https://github.com/Rosettea/Bunnyfetch
 cd Bunnyfetch
 cargo build --release
 ```  
