@@ -25,11 +25,6 @@
 	<img src="https://modeus.is-inside.me/MMqlgFWt.png">
 </div>
 
-# Table of Contents
-- [Install](#install)
-  - [Compile](#compiling)
-- [License](#license)
-
 # Install
 Binaries are provided at the releases page [here](https://github.com/Rosettea/Bunnyfetch/releases).
 Alternatively, those on Arch Linux can compile using the [AUR package](https://aur.archlinux.org/packages/bunnyfetch-git/).  
