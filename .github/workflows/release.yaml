@@ -20,6 +20,7 @@ jobs:
     - uses: wangyoucao577/go-release-action@v1.21
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        goversion: https://dl.google.com/go/go1.17.3.linux-amd64.tar.gz
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
         extra_files: LICENSE README.md
