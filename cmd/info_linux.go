@@ -58,9 +58,9 @@ func WM() string {
 	if err != nil {
 		return "Unknown"
 	}
-	windowId := xproto.Window(xgb.Get32(reply.Value))
+	windowID := xproto.Window(xgb.Get32(reply.Value))
 
-	reply, err = xproto.GetProperty(X, false, windowId, nameAtom.Atom,
+	reply, err = xproto.GetProperty(X, false, windowID, nameAtom.Atom,
 	xproto.GetPropertyTypeAny, 0, (1<<32)-1).Reply()
 	if err != nil {
 		return "Unknown"
