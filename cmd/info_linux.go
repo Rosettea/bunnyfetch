@@ -4,8 +4,10 @@ package cmd
 
 import (
 	"os"
-	"os/exec"
 	"strings"
+
+	"github.com/jezek/xgb"
+	"github.com/jezek/xgb/xproto"
 )
 
 func OS() string {
@@ -27,7 +29,43 @@ func Shell() string {
 }
 
 func WM() string {
-	out, _ := exec.Command("bash", "-c", `xprop -id $(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}') -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \"`).CombinedOutput()
+	X, err := xgb.NewConn()
+	if err != nil {
+		return "Unknown"
+	}
+	defer X.Close()
 
-	return string(out)
+	setup := xproto.Setup(X)
+	root := setup.DefaultScreen(X).Root
+
+	// get a "window" for the window manager (makes sense huh)
+	aname := "_NET_SUPPORTING_WM_CHECK"
+	activeAtom, err := xproto.InternAtom(X, true, uint16(len(aname)), aname).Reply()
+	if err != nil {
+		return "Unknown"
+	}
+
+	// get the atom for the actual window manager name
+	aname = "_NET_WM_NAME"
+	nameAtom, err := xproto.InternAtom(X, true, uint16(len(aname)), aname).Reply()
+	if err != nil {
+		return "Unknown"
+	}
+
+	// and its value
+	reply, err := xproto.GetProperty(X, false, root, activeAtom.Atom,
+		xproto.GetPropertyTypeAny, 0, (1 << 32) - 1).Reply()
+	if err != nil {
+		return "Unknown"
+	}
+	windowId := xproto.Window(xgb.Get32(reply.Value))
+
+	reply, err = xproto.GetProperty(X, false, windowId, nameAtom.Atom,
+	xproto.GetPropertyTypeAny, 0, (1<<32)-1).Reply()
+	if err != nil {
+		return "Unknown"
+	}
+
+	return string(reply.Value)
 }
+
