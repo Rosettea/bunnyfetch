@@ -27,7 +27,6 @@
 
 # Install
 Binaries are provided at the releases page [here](https://github.com/Rosettea/Bunnyfetch/releases).
-Alternatively, those on Arch Linux can compile using the [AUR package](https://aur.archlinux.org/packages/bunnyfetch-git/).  
 Or, you can just run `go get -u github.com/Rosettea/bunnyfetch`
 
 ## Manual Compile
