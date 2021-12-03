@@ -28,7 +28,12 @@ jobs:
       - name: Build
         run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags "-s -w"
       - uses: actions/upload-artifact@v2
+        if: ${{ matrix.os != 'windows' }}
         with:
           name: bunnyfetch-${{ matrix.os }}-${{ matrix.arch }}
           path: bunnyfetch
-
+      - uses: actions/upload-artifact@v2
+        if: ${{ matrix.os == 'windows' }}
+        with:
+          name: bunnyfetch-${{ matrix.os }}-${{ matrix.arch }}.exe
+          path: bunnyfetch.exe
