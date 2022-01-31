@@ -36,5 +36,5 @@ fn main() {
     for pat in 0..=7 {
         print!("\x1B[4{}m   ", pat);
     }
-    println!()
+    println!("{}",  Colors::Reset)
 }
