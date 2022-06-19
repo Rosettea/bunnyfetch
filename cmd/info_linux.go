@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/jezek/xgb"
@@ -28,7 +29,34 @@ func Shell() string {
 	return shellenv[len(shellenv) - 1]
 }
 
+// $XDG_SESSION_DESKTOP
+
 func WM() string {
+	if waylandDisplay := os.Getenv("WAYLAND_DISPLAY"); os.Getenv("XDG_SESSION_TYPE") == "wayland" || waylandDisplay != "" {
+		// if we're here WAYLAND_DESKTOP wont be empty
+		sockPath := os.Getenv("XDG_RUNTIME_DIR") + "/" + waylandDisplay
+		_, err := os.Stat(sockPath)
+		if err != nil {
+			return "Unknown"
+		}
+
+		// TODO: not shell out to fuser
+		// doing its job is half hell and i dont really want to deal with it
+		out, err := exec.Command("fuser", sockPath).CombinedOutput()
+		if err != nil {
+			return "Unknown"
+		}
+
+		procID := strings.TrimSpace(strings.Split(string(out), ":")[1])
+		bin, err := os.Readlink("/proc/" + procID + "/exe")
+		// apparently may not exist?
+		if err != nil {
+			return "Unknown"
+		}
+
+		splitBin := strings.Split(bin, "/")
+		return splitBin[len(splitBin) - 1]
+	}
 	X, err := xgb.NewConn()
 	if err != nil {
 		return "Unknown"
