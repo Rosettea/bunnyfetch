@@ -29,11 +29,8 @@ func Shell() string {
 	return shellenv[len(shellenv) - 1]
 }
 
-// $XDG_SESSION_DESKTOP
-
 func WM() string {
 	if waylandDisplay := os.Getenv("WAYLAND_DISPLAY"); os.Getenv("XDG_SESSION_TYPE") == "wayland" || waylandDisplay != "" {
-		// if we're here WAYLAND_DESKTOP wont be empty
 		sockPath := os.Getenv("XDG_RUNTIME_DIR") + "/" + waylandDisplay
 		_, err := os.Stat(sockPath)
 		if err != nil {
