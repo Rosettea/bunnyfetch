@@ -23,7 +23,8 @@ var Bunny =
             %s
    (\ /)    %s
    ( . .)   %s
-   c(%s)(%s)  %s`
+   c(%s)(%s)  %s
+`
 
 func bunnyfetch() {
 	// /etc/os-release should always exist on Linux
