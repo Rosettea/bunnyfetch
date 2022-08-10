@@ -26,7 +26,7 @@
 </div>
 
 # Install
-Binaries are provided at the releases page [here](https://github.com/Rosettea/Bunnyfetch/releases).
+Binaries are provided at the releases page [here](https://github.com/Rosttea/Bunnyfetch/releases).
 Or, you can just run `go install github.com/Rosettea/bunnyfetch@latest`
 
 ## Manual Compile
