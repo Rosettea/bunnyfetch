@@ -8,6 +8,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var noDistroColor = false
 var RootCmd = &cobra.Command{
 	Use: "bunnyfetch",
 	Short: "Tiny system info fetch utility.",
@@ -25,6 +26,10 @@ var Bunny =
    ( . .)   %s
    c(%s)(%s)  %s
 `
+
+func init() {
+	RootCmd.PersistentFlags().BoolVarP(&noDistroColor, "no-distro-color", "d", false, "don't use the color defined in os-release for the OS color")
+}
 
 func bunnyfetch() {
 	// /etc/os-release should always exist on Linux
@@ -55,7 +60,7 @@ func titleinf() string {
 func osinf() string {
 	// ansi colors of distro (name)? from /etc/os-release
 	color := os.Getenv("ANSI_COLOR")
-	if color == "" {
+	if color == "" || noDistroColor {
 		color = "32"
 	}
 
