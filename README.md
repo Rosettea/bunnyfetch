@@ -22,7 +22,7 @@
 		Bunnyfetch is a small and fast tool for getting info about your system.
 		The idea is from <a href="https://github.com/elenapan/dotfiles/blob/master/bin/bunnyfetch">this here</a> and I decided to make it crossplatform in Go.
 	</p><br>
-	<img src="https://safe.kashima.moe/n75w100wuuks.png">
+	<img src="https://safe.saya.moe/rTL8k6UtKxEs.png">
 </div>
 
 # Install
@@ -36,6 +36,12 @@ cd Bunnyfetch
 go get -d ./...
 go build -ldflags "-w -s" # ldflags make the binary smaller
 ```  
+
+# Usage
+Run `bunnyfetch`!
+Some people may notice that the color of "OS" will not match their colorscheme.
+That is because it is taken from the /etc/os-release file. If you wish to disable
+the feature, the `--no-distro-color` or `-d` flag can be used.
 
 # License
 Bunnyfetch is licensed under the MIT license.  
