@@ -19,21 +19,18 @@ jobs:
             os: windows 
 
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v2
-      - name: Setup Go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
         with:
           go-version: '1.16.2'
+
       - name: Build
         run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags "-s -w"
-      - uses: actions/upload-artifact@v2
-        if: ${{ matrix.os != 'windows' }}
+        
+      - uses: actions/upload-artifact@v4
         with:
           name: bunnyfetch-${{ matrix.os }}-${{ matrix.arch }}
-          path: bunnyfetch
-      - uses: actions/upload-artifact@v2
-        if: ${{ matrix.os == 'windows' }}
-        with:
-          name: bunnyfetch-${{ matrix.os }}-${{ matrix.arch }}.exe
-          path: bunnyfetch.exe
+          path: |
+            bunnyfetch
+            bunnyfetch.exe

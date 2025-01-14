@@ -1,19 +1,30 @@
+//go:build darwin
 // +build darwin
 
 package cmd
 
 import (
+	"bytes"
 	"os"
 	"os/exec"
 	"strings"
 )
 
 func OS() string {
-	out, err := exec.Command("sw_vers", "-productName").CombinedOutput()
+	name, err := exec.Command("sw_vers", "-productName").CombinedOutput()
 	if err != nil {
 		return "Unknown"
 	}
-	return strings.TrimSuffix(string(out), "\n")
+
+	name = bytes.TrimSuffix(name, []byte{'\n'})
+
+	version, err := exec.Command("sw_vers", "-productVersion").CombinedOutput()
+	if err != nil {
+		return string(name)
+	}
+
+	version = bytes.TrimSuffix(version, []byte{'\n'})
+	return string(name) + " " + string(version)
 }
 
 func Kernel() string {
